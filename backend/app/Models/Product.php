@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +24,10 @@ class Product extends Model
         'image_path',
     ];
 
+    protected $appends = ['image_url'];
+
+    protected $hidden = ['image_path'];
+
     protected function casts(): array
     {
         return [
@@ -31,6 +36,13 @@ class Product extends Model
             'stock' => 'integer',
             'min_stock' => 'integer',
         ];
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->image_path ? asset('storage/'.$this->image_path) : null
+        );
     }
 
     public function category(): BelongsTo
