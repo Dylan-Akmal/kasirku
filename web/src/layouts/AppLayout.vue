@@ -1,12 +1,18 @@
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 const router = useRouter()
 
-// Menu akan bertambah seiring halaman baru dibuat
-const menu = [{ label: 'Dashboard', to: { name: 'dashboard' } }]
+const allMenu = [
+  { label: 'Dashboard', to: { name: 'dashboard' } },
+  { label: 'Produk', to: { name: 'products' } },
+  { label: 'Kategori', to: { name: 'categories' }, adminOnly: true },
+]
+
+const menu = computed(() => allMenu.filter((item) => !item.adminOnly || auth.isAdmin))
 
 async function logout() {
   await auth.logout()
