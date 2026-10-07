@@ -3,3 +3,22 @@
 body {
   @apply bg-slate-50 text-slate-800 antialiased;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt-print,
+  #receipt-print * {
+    visibility: visible;
+  }
+
+  #receipt-print {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 80mm;
+    padding: 4mm;
+  }
+}
