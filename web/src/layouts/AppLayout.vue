@@ -12,6 +12,7 @@ const allMenu = [
   { label: 'Riwayat', to: { name: 'history' } },
   { label: 'Produk', to: { name: 'products' } },
   { label: 'Stok', to: { name: 'stock' }, adminOnly: true },
+  { label: 'Laporan', to: { name: 'reports' }, adminOnly: true },
   { label: 'Kategori', to: { name: 'categories' }, adminOnly: true },
 ]
 
