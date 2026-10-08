@@ -36,6 +36,12 @@ const router = createRouter({
           component: () => import('@/views/ProductsView.vue'),
         },
         {
+          path: 'stock',
+          name: 'stock',
+          component: () => import('@/views/StockView.vue'),
+          meta: { adminOnly: true },
+        },
+        {
           path: 'categories',
           name: 'categories',
           component: () => import('@/views/CategoriesView.vue'),

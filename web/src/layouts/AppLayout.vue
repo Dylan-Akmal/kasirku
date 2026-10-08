@@ -11,6 +11,7 @@ const allMenu = [
   { label: 'Kasir', to: { name: 'pos' } },
   { label: 'Riwayat', to: { name: 'history' } },
   { label: 'Produk', to: { name: 'products' } },
+  { label: 'Stok', to: { name: 'stock' }, adminOnly: true },
   { label: 'Kategori', to: { name: 'categories' }, adminOnly: true },
 ]
 
