@@ -9,6 +9,7 @@ const router = useRouter()
 const allMenu = [
   { label: 'Dashboard', to: { name: 'dashboard' } },
   { label: 'Kasir', to: { name: 'pos' } },
+  { label: 'Riwayat', to: { name: 'history' } },
   { label: 'Produk', to: { name: 'products' } },
   { label: 'Kategori', to: { name: 'categories' }, adminOnly: true },
 ]
