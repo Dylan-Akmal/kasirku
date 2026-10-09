@@ -53,6 +53,23 @@ const router = createRouter({
           component: () => import('@/views/CategoriesView.vue'),
           meta: { adminOnly: true },
         },
+        {
+          path: 'users',
+          name: 'users',
+          component: () => import('@/views/UsersView.vue'),
+          meta: { adminOnly: true },
+        },
+        {
+          path: 'settings',
+          name: 'settings',
+          component: () => import('@/views/StoreSettingsView.vue'),
+          meta: { adminOnly: true },
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('@/views/ProfileView.vue'),
+        },
       ],
     },
     {
