@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/cart_provider.dart';
+import 'cashier_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,17 +17,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = <Widget>[
-      const _Placeholder(label: 'Halaman Kasir (segera hadir)'),
-      const _Placeholder(label: 'Riwayat Transaksi (segera hadir)'),
-      const _AccountTab(),
-    ];
-
     const titles = ['Kasir', 'Riwayat', 'Akun Saya'];
 
     return Scaffold(
       appBar: AppBar(title: Text(titles[_index])),
-      body: pages[_index],
+      body: IndexedStack(
+        index: _index,
+        children: const [
+          CashierScreen(),
+          _Placeholder(label: 'Riwayat Transaksi (segera hadir)'),
+          _AccountTab(),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
@@ -61,7 +64,10 @@ class _AccountTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final user = auth.user!;
+    final user = auth.user;
+
+    if (user == null) return const SizedBox.shrink();
+
     final theme = Theme.of(context);
 
     return ListView(
@@ -89,7 +95,10 @@ class _AccountTab extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         OutlinedButton.icon(
-          onPressed: () => context.read<AuthProvider>().logout(),
+          onPressed: () {
+            context.read<CartProvider>().clear();
+            context.read<AuthProvider>().logout();
+          },
           icon: const Icon(Icons.logout),
           label: const Text('Keluar'),
         ),
