@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
 import 'cashier_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _historyKey = GlobalKey<HistoryScreenState>();
   int _index = 0;
+
+  void _select(int value) {
+    setState(() => _index = value);
+
+    // Setiap kali tab Riwayat dibuka, muat ulang agar transaksi terbaru ikut tampil.
+    if (value == 1) {
+      _historyKey.currentState?.refresh();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,36 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text(titles[_index])),
       body: IndexedStack(
         index: _index,
-        children: const [
-          CashierScreen(),
-          _Placeholder(label: 'Riwayat Transaksi (segera hadir)'),
-          _AccountTab(),
+        children: [
+          const CashierScreen(),
+          HistoryScreen(key: _historyKey),
+          const _AccountTab(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
-        onDestinationSelected: (value) => setState(() => _index = value),
+        onDestinationSelected: _select,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.point_of_sale), label: 'Kasir'),
           NavigationDestination(icon: Icon(Icons.receipt_long), label: 'Riwayat'),
           NavigationDestination(icon: Icon(Icons.person), label: 'Akun'),
         ],
-      ),
-    );
-  }
-}
-
-class _Placeholder extends StatelessWidget {
-  const _Placeholder({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }
