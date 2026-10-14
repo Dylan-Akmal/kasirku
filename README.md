@@ -1,16 +1,16 @@
 # Kasirku
 
-Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong, dan kedai kopi. Terdiri dari REST API (Laravel), aplikasi web untuk admin dan kasir (Vue 3), dan aplikasi mobile untuk kasir (Flutter, dalam pengembangan).
+Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong, dan kedai kopi. Terdiri dari REST API (Laravel), aplikasi web untuk admin dan kasir (Vue 3), dan aplikasi mobile untuk kasir (Flutter).
 
 ## Fitur
 
-**Kasir**
-- Halaman kasir dengan pencarian produk, filter kategori, dan scan barcode (pemindai USB mengetik SKU lalu Enter)
+**Kasir (web dan mobile)**
+- Halaman kasir dengan pencarian produk, filter kategori, dan scan barcode (di web: pemindai USB mengetik SKU lalu Enter; di mobile: ketik SKU lalu tekan cari)
 - Keranjang dengan batas jumlah sesuai stok, diskon nominal atau persen, dan pembayaran tunai, QRIS, atau transfer
-- Hitung kembalian otomatis dan struk yang bisa dicetak
-- Riwayat transaksi milik sendiri beserta cetak ulang struk
+- Hitung kembalian otomatis dan struk (web: bisa dicetak; mobile: bisa disalin)
+- Riwayat transaksi milik sendiri dengan filter tanggal dan status, detail, dan struk
 
-**Admin**
+**Admin (web)**
 - Semua fitur kasir, ditambah manajemen produk, kategori, dan foto produk
 - Stok masuk, penyesuaian stok (stock opname), dan riwayat pergerakan stok
 - Pembatalan (void) transaksi dengan alasan, dan stok otomatis dikembalikan
@@ -23,9 +23,11 @@ Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong,
 |---|---|
 | Backend | Laravel 12, Laravel Sanctum (token Bearer), MySQL |
 | Web | Vue 3, Vite, Tailwind CSS, Pinia, Vue Router, Axios |
-| Mobile | Flutter (dalam pengembangan) |
+| Mobile | Flutter, Provider, Dio |
 
 ## Tangkapan layar
+
+### Web
 
 | Login | Dashboard |
 |---|---|
@@ -43,12 +45,23 @@ Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong,
 |---|---|
 | ![Stok](docs/screenshots/07-stock.png) | ![Laporan](docs/screenshots/08-reports.png) |
 
+### Mobile
+
+| Login | Kasir | Keranjang |
+|---|---|---|
+| <img src="docs/screenshots/m01-login.png" width="220" alt="Login"> | <img src="docs/screenshots/m02-kasir.png" width="220" alt="Kasir"> | <img src="docs/screenshots/m03-cart.png" width="220" alt="Keranjang"> |
+
+| Struk | Riwayat | Detail Transaksi |
+|---|---|---|
+| <img src="docs/screenshots/m04-receipt.png" width="220" alt="Struk"> | <img src="docs/screenshots/m05-history.png" width="220" alt="Riwayat"> | <img src="docs/screenshots/m06-detail.png" width="220" alt="Detail"> |
+
 ## Struktur repositori
 
 ```
 kasirku/
 ├── backend/   REST API Laravel
 ├── web/       Aplikasi web Vue 3
+├── mobile/    Aplikasi mobile Flutter (kasir)
 └── docs/      SRS, ERD, dan tangkapan layar
 ```
 
@@ -56,7 +69,7 @@ kasirku/
 
 ### Prasyarat
 
-PHP 8.2 atau lebih baru, Composer, MySQL (misalnya lewat XAMPP), dan Node.js 20 atau lebih baru.
+PHP 8.2 atau lebih baru, Composer, MySQL (misalnya lewat XAMPP), Node.js 20 atau lebih baru, dan untuk aplikasi mobile Flutter SDK serta Android Studio dengan emulator Android.
 
 ### Backend
 
@@ -100,9 +113,21 @@ npm run dev
 
 Aplikasi web berjalan di `http://localhost:5173`. Alamat API dapat diubah lewat variabel `VITE_API_URL` di `web/.env` (bawaan: `http://127.0.0.1:8000/api`).
 
+### Mobile
+
+Pastikan backend sudah berjalan, lalu nyalakan emulator Android dan jalankan:
+
+```bash
+cd mobile
+flutter pub get
+flutter run
+```
+
+Alamat API diatur di `mobile/lib/core/config.dart`. Nilai bawaan `http://10.0.2.2:8000/api` dipakai untuk emulator Android (alamat `10.0.2.2` menunjuk ke komputer host). Untuk HP asli, ganti dengan alamat IP komputer di jaringan WiFi yang sama, dan jalankan backend dengan `php artisan serve --host=0.0.0.0`.
+
 ### Akun uji
 
-Dibuat oleh seeder, khusus untuk pengembangan. Ganti kata sandinya sebelum dipakai di lingkungan sebenarnya.
+Dibuat oleh seeder, khusus untuk pengembangan. Ganti kata sandinya sebelum dipakai di lingkungan sebenarnya. Aplikasi mobile ditujukan untuk kasir, sedangkan fitur admin ada di web.
 
 | Peran | Email | Kata sandi |
 |---|---|---|
@@ -147,6 +172,7 @@ Semua rute berawalan `/api` dan memakai header `Authorization: Bearer <token>` k
 
 ## Rencana pengembangan
 
-- Aplikasi mobile untuk kasir dengan Flutter
+- Scan barcode lewat kamera di aplikasi mobile
+- Bagikan struk dari aplikasi mobile (WhatsApp dan sejenisnya)
 - Pengujian otomatis (feature test API)
 - Cetak struk ke printer thermal Bluetooth
