@@ -1,4 +1,5 @@
 # Kasirku
+![Backend Tests](https://github.com/Dylan-Akmal/kasirku/actions/workflows/backend-tests.yml/badge.svg)
 
 Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong, dan kedai kopi. Terdiri dari REST API (Laravel), aplikasi web untuk admin dan kasir (Vue 3), dan aplikasi mobile untuk kasir (Flutter).
 
@@ -125,6 +126,17 @@ flutter run
 
 Alamat API diatur di `mobile/lib/core/config.dart`. Nilai bawaan `http://10.0.2.2:8000/api` dipakai untuk emulator Android (alamat `10.0.2.2` menunjuk ke komputer host). Untuk HP asli, ganti dengan alamat IP komputer di jaringan WiFi yang sama, dan jalankan backend dengan `php artisan serve --host=0.0.0.0`.
 
+### Pengujian
+
+Backend memiliki feature test (PHPUnit) yang berjalan di SQLite memori, sehingga tidak menyentuh database MySQL:
+
+```bash
+cd backend
+php artisan test
+```
+
+Cakupannya meliputi autentikasi, hak akses peran, checkout (stok, diskon, kembalian, dan pembatalan menyeluruh bila gagal), pembatalan transaksi (void), dan laporan penjualan. Tes dijalankan otomatis lewat GitHub Actions setiap ada perubahan di folder `backend`.
+
 ### Akun uji
 
 Dibuat oleh seeder, khusus untuk pengembangan. Ganti kata sandinya sebelum dipakai di lingkungan sebenarnya. Aplikasi mobile ditujukan untuk kasir, sedangkan fitur admin ada di web.
@@ -174,5 +186,4 @@ Semua rute berawalan `/api` dan memakai header `Authorization: Bearer <token>` k
 
 - Scan barcode lewat kamera di aplikasi mobile
 - Bagikan struk dari aplikasi mobile (WhatsApp dan sejenisnya)
-- Pengujian otomatis (feature test API)
 - Cetak struk ke printer thermal Bluetooth
