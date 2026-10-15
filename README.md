@@ -1,5 +1,5 @@
 # Kasirku
-![Backend Tests](https://github.com/Dylan-Akmal/kasirku/actions/workflows/backend-tests.yml/badge.svg)
+[![Backend Tests](https://github.com/Dylan-Akmal/kasirku/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/Dylan-Akmal/kasirku/actions/workflows/backend-tests.yml)
 
 Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong, dan kedai kopi. Terdiri dari REST API (Laravel), aplikasi web untuk admin dan kasir (Vue 3), dan aplikasi mobile untuk kasir (Flutter).
 
