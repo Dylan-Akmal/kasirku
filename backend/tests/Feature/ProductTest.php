@@ -115,7 +115,7 @@ class ProductTest extends TestCase
             $this->markTestSkipped('Ekstensi GD tidak tersedia.');
         }
 
-        Storage::fake('public');
+        $disk = Storage::fake('public');
         $this->actingAsAdmin();
         $product = $this->product();
 
@@ -127,15 +127,15 @@ class ProductTest extends TestCase
 
         $path = $product->fresh()->image_path;
 
-        Storage::disk('public')->assertExists($path);
+        $disk->assertExists($path);
         $this->assertNotNull($response->json('data.image_url'));
 
         $this->deleteJson("/api/products/{$product->id}/image")->assertOk();
 
-        Storage::disk('public')->assertMissing($path);
+        $disk->assertMissing($path);
         $this->assertNull($product->fresh()->image_path);
     }
-
+    
     public function test_image_upload_rejects_non_image_files(): void
     {
         Storage::fake('public');
