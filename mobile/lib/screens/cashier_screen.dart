@@ -8,8 +8,10 @@ import '../core/errors.dart';
 import '../core/format.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
+import '../services/product_service.dart';
 import '../widgets/cart_sheet.dart';
 import '../widgets/receipt_dialog.dart';
+import 'scanner_screen.dart';
 
 class CashierScreen extends StatefulWidget {
   const CashierScreen({super.key});
@@ -91,32 +93,35 @@ class _CashierScreenState extends State<CashierScreen> {
     _debounce = Timer(const Duration(milliseconds: 300), _loadProducts);
   }
 
-  /// Menekan tombol cari di keyboard dengan SKU persis (hasil scan) langsung memasukkan produk ke keranjang.
+  /// Menekan tombol cari di keyboard dengan SKU persis langsung memasukkan produk ke keranjang.
   Future<void> _onSearchSubmitted(String value) async {
     final term = value.trim();
     if (term.isEmpty) return;
 
     try {
-      final response = await ApiClient.instance.dio.get(
-        '/products',
-        queryParameters: {'sku': term},
-      );
+      final product = await ProductService.findBySku(term);
 
-      final list = response.data['data'] as List<dynamic>;
+      if (!mounted) return;
 
-      if (list.length == 1) {
-        final product = Product.fromJson(list.first as Map<String, dynamic>);
-
-        if (!mounted) return;
-        _toast(context.read<CartProvider>().add(product) ?? '${product.name} ditambahkan.');
-        _searchController.clear();
-        _loadProducts();
-      } else {
+      if (product == null) {
         _toast('SKU "$term" tidak ditemukan.');
+        return;
       }
+
+      _toast(context.read<CartProvider>().add(product) ?? '${product.name} ditambahkan.');
+      _searchController.clear();
+      _loadProducts();
     } catch (e) {
       _toast(errorMessage(e, 'Gagal mencari SKU.'));
     }
+  }
+
+  Future<void> _openScanner() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const ScannerScreen()),
+    );
+
+    if (mounted) _loadProducts();
   }
 
   void _toast(String message) {
@@ -166,6 +171,11 @@ class _CashierScreenState extends State<CashierScreen> {
             decoration: InputDecoration(
               hintText: 'Cari produk atau ketik SKU lalu cari',
               prefixIcon: const Icon(Icons.search),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.qr_code_scanner),
+                tooltip: 'Scan barcode',
+                onPressed: _openScanner,
+              ),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               isDense: true,
             ),
