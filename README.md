@@ -6,7 +6,7 @@ Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong,
 ## Fitur
 
 **Kasir (web dan mobile)**
-- Halaman kasir dengan pencarian produk, filter kategori, dan scan barcode (di web: pemindai USB mengetik SKU lalu Enter; di mobile: ketik SKU lalu tekan cari)
+- Halaman kasir dengan pencarian produk, filter kategori, dan scan barcode (di web: pemindai USB mengetik SKU lalu Enter; di mobile: scan lewat kamera untuk banyak barang berturut-turut, atau ketik SKU lalu tekan cari)
 - Keranjang dengan batas jumlah sesuai stok, diskon nominal atau persen, dan pembayaran tunai, QRIS, atau transfer
 - Hitung kembalian otomatis dan struk (web: bisa dicetak; mobile: bisa disalin)
 - Riwayat transaksi milik sendiri dengan filter tanggal dan status, detail, dan struk
@@ -52,9 +52,9 @@ Aplikasi kasir (Point of Sale) untuk usaha kecil seperti warung, toko kelontong,
 |---|---|---|
 | <img src="docs/screenshots/m01-login.png" width="220" alt="Login"> | <img src="docs/screenshots/m02-kasir.png" width="220" alt="Kasir"> | <img src="docs/screenshots/m03-cart.png" width="220" alt="Keranjang"> |
 
-| Struk | Riwayat | Detail Transaksi |
-|---|---|---|
-| <img src="docs/screenshots/m04-receipt.png" width="220" alt="Struk"> | <img src="docs/screenshots/m05-history.png" width="220" alt="Riwayat"> | <img src="docs/screenshots/m06-detail.png" width="220" alt="Detail"> |
+| Struk | Riwayat | Detail Transaksi | Scan Barcode |
+|---|---|---|---|
+| <img src="docs/screenshots/m04-receipt.png" width="220" alt="Struk"> | <img src="docs/screenshots/m05-history.png" width="220" alt="Riwayat"> | <img src="docs/screenshots/m06-detail.png" width="220" alt="Detail"> | <img src="docs/screenshots/m07-scanner.png" width="220" alt="Scan Barcode"> |
 
 ## Struktur repositori
 
@@ -124,7 +124,7 @@ flutter pub get
 flutter run
 ```
 
-Alamat API diatur di `mobile/lib/core/config.dart`. Nilai bawaan `http://10.0.2.2:8000/api` dipakai untuk emulator Android (alamat `10.0.2.2` menunjuk ke komputer host). Untuk HP asli, ganti dengan alamat IP komputer di jaringan WiFi yang sama, dan jalankan backend dengan `php artisan serve --host=0.0.0.0`.
+Alamat API diatur di `mobile/lib/core/config.dart`. Nilai bawaan `http://10.0.2.2:8000/api` dipakai untuk emulator Android (alamat `10.0.2.2` menunjuk ke komputer host). Untuk HP asli, ganti dengan alamat IP komputer di jaringan WiFi yang sama, dan jalankan backend dengan `php artisan serve --host=0.0.0.0`. Fitur scan barcode memakai kamera, jadi izinkan akses kamera saat diminta. Di emulator, atur Camera Back ke Webcam0 lewat pengaturan lanjutan emulator, lalu arahkan barcode (Code 128 berisi SKU produk) ke webcam.
 
 ### Pengujian
 
@@ -184,6 +184,5 @@ Semua rute berawalan `/api` dan memakai header `Authorization: Bearer <token>` k
 
 ## Rencana pengembangan
 
-- Scan barcode lewat kamera di aplikasi mobile
 - Bagikan struk dari aplikasi mobile (WhatsApp dan sejenisnya)
 - Cetak struk ke printer thermal Bluetooth
